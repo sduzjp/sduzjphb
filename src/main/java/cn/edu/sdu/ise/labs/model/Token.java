@@ -31,9 +31,25 @@ public class Token {
      * 教师编码
      */
     private String teacherCode;
-
     /**
      * 上次动作
      */
     private Date lastAction;
+    /**
+     * 创建人
+     */
+    private String createdBy;
+    /**
+     * 创建时间
+     */
+    private Date createdAt;
+    /**
+     * 更新人
+     */
+    private String updatedBy;
+    /**
+     * 更新时间
+     */
+    private Date updatedAt;
+
 }

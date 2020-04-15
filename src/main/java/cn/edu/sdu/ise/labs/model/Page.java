@@ -12,11 +12,12 @@ import java.util.List;
  */
 @Data
 public class Page<T> {
-    public Page(int page, int pageSize, int total, List<T> dtoList) {
+    //入参：当前页码，每页记录条数，记录总条数，当前页需要的数据(List<T> dtoList)这个是用来干什么？
+    public Page( int page , int pageSize , int total , List<T> dtoList ) {
         this.page = page;
         this.pageSize = pageSize;
         this.total = total;
-        this.setList(dtoList);
+        this.setList( dtoList );
     }
 
     /**
@@ -39,7 +40,8 @@ public class Page<T> {
      **/
     private List<T> list;
 
-    public static Page getNullPage(Integer page, Integer pageSize) {
-        return new Page(page, pageSize, 0, Collections.emptyList());
+    //Collections.emptyList( )这是用来干什么？
+    public static Page getNullPage( Integer page , Integer pageSize ) {
+        return new Page( page , pageSize , 0 , Collections.emptyList( ) );
     }
 }

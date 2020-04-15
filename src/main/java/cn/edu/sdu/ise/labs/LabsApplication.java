@@ -17,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 public class LabsApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(LabsApplication.class, args);
+    public static void main( String[] args ) {
+        SpringApplication.run( LabsApplication.class , args );
     }
 
 }

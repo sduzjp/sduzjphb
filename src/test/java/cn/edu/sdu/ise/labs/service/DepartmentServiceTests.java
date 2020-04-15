@@ -23,6 +23,11 @@ import java.util.Map;
  * @description
  * @date 2019/12/3 10:29
  */
+
+/**
+ * 前四个注解要放到自己的单元测试类当中去
+ * 在单元测试类当中自己设置断点来测试
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @MapperScan("cn.edu.sdu.ise.labs.dao")
@@ -32,61 +37,62 @@ public class DepartmentServiceTests {
     private DepartmentService departmentService;
 
     @Test
-    public void testListByPage() {
-        initToken();
-        DepartmentQueryDTO queryDTO = new DepartmentQueryDTO();
-        queryDTO.setPage(1);
-        queryDTO.setPageSize(10);
-        Page<DepartmentVO> pageData = departmentService.listByPage(queryDTO);
-        assert pageData.getList().size() > 0;
+    public void testListByPage( ) {
+        initToken( );
+        DepartmentQueryDTO queryDTO = new DepartmentQueryDTO( );
+        queryDTO.setPage( 1 );
+        queryDTO.setPageSize( 10 );
+        Page<DepartmentVO> pageData = departmentService.listByPage( queryDTO );
+        assert pageData.getList( ).size( ) > 0;
     }
 
     @Test
-    public void testAdd() {
-        initToken();
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setDepartmentName("通信所");
-        departmentDTO.setContact("张三");
-        departmentDTO.setContactPhone("1532384234234");
-        departmentDTO.setDescription("这是一条备注");
-        assert departmentService.addDepartment(departmentDTO) != null;
+    public void testAdd( ) {
+        initToken( );
+        DepartmentDTO departmentDTO = new DepartmentDTO( );
+        departmentDTO.setDepartmentName( "通信所" );
+        departmentDTO.setContact( "赵五" );
+        departmentDTO.setContactPhone( "1532384234234" );
+        departmentDTO.setDescription( "这是一条备注" );
+        assert departmentService.addDepartment( departmentDTO ) != null;
     }
 
     @Test
-    public void testListByCodes() {
-        initToken();
-        List<String> codeList = new ArrayList<>();
-        codeList.add("DP1912030006");
-        Map<String, DepartmentVO> map = departmentService.getDepartmentMap(codeList);
-        assert map.size() != 0;
+    public void testListByCodes( ) {
+        initToken( );
+        List<String> codeList = new ArrayList<>( );
+        codeList.add( "DP1912030006" );
+        Map<String, DepartmentVO> map = departmentService.getDepartmentMap( codeList );
+        assert map.size( ) != 0;
     }
 
     @Test
-    public void testListByName() {
-        initToken();
-        List<String> codeList = new ArrayList<>();
-        codeList.add("DP1912030006");
-        List<DepartmentVO> list = departmentService.listByName("心");
-        assert list.size() != 0;
+    public void testListByName( ) {
+        initToken( );
+        List<String> codeList = new ArrayList<>( );
+        codeList.add( "DP1912030006" );
+        List<DepartmentVO> list = departmentService.listByName( "心" );
+        assert list.size( ) != 0;
     }
 
     @Test
-    public void testUpdate() {
-        initToken();
+    public void testUpdate( ) {
+        initToken( );
 
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setDepartmentCode("DP0000001");
-        departmentDTO.setDepartmentName("通信所");
-        departmentDTO.setContact("张三");
-        departmentDTO.setContactPhone("1532384234234");
-        departmentDTO.setDescription("这是一条备注");
-        assert departmentService.addDepartment(departmentDTO) != null;
+        DepartmentDTO departmentDTO = new DepartmentDTO( );
+        departmentDTO.setDepartmentCode( "DP0000001" );
+        departmentDTO.setDepartmentName( "通信所" );
+        departmentDTO.setContact( "张三" );
+        departmentDTO.setContactPhone( "1532384234234" );
+        departmentDTO.setDescription( "这是一条备注" );
+        assert departmentService.addDepartment( departmentDTO ) != null;
     }
 
-    private void initToken() {
-        Token token = new Token();
-        token.setTenantCode("001");
-        token.setTeacherCode("TE00000001");
-        TokenContextHolder.setToken(token);
+    private void initToken( ) {
+        Token token = new Token( );
+        token.setTenantCode( "001" );
+        token.setTeacherCode( "TE00000001" );
+        TokenContextHolder.setToken( token );
     }
 }
+

@@ -63,7 +63,7 @@ public class Department {
     private String createdBy;
 
     /**
-     * 更信人代码
+     * 更新人代码
      */
     private String updatedBy;
 

@@ -28,38 +28,62 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * 先看懂department的业务逻辑然后自己写接口实现类的业务逻辑！！
+ *
  * @author 李洪文
  * @description
  * @date 2019/12/3 9:33
  */
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+    //DepartmentMapper接口中定义的是关于增删改查数据库表的抽象方法，由mybatis自动生成。
+
     @Autowired
     private DepartmentMapper departmentMapper;
+
+    //KeyMaxValueService接口定义的是生成各业务表的抽象方法
 
     @Autowired
     private KeyMaxValueService keyMaxValueService;
 
+    //覆盖重写接口中的抽象方法
+
+    /**
+     * 根据查询条件返回部门信息列表分页
+     * 查询条件有部门名称、租户代码、页码、页记录条数
+     * 我的想法：可不可以就是直接根据你查询的这四个条件来判断，如果存在符合这四个条件的信息就返回分页列表，否则就返回null
+     *
+     * @param queryDTO
+     * @return 部门信息列表分页Page<DepartmentVO>
+     */
     @Override
-    public Page<DepartmentVO> listByPage(DepartmentQueryDTO queryDTO) {
-        if (queryDTO == null) {
-            queryDTO = new DepartmentQueryDTO();
+    public Page<DepartmentVO> listByPage( DepartmentQueryDTO queryDTO ) {
+        //如果入口参数(查询条件)为null，那么自己创建一个查询部门条件的实例，是不是说查询为null时最后返回全部部门的信息？所以先得创建一个
+        //queryDTO，以便之后将每条信息都添加到返回的信息列表中？
+        if ( queryDTO == null ) {
+            queryDTO = new DepartmentQueryDTO( );
         }
 
-        queryDTO.setDepartmentName(FormatUtils.makeFuzzySearchTerm(queryDTO.getDepartmentName()));
-        Token token = TokenContextHolder.getToken();
+        //取得部门名称，但是括号FormatUtils.makeFuzzySearchTerm这是在干什么？
+        queryDTO.setDepartmentName( FormatUtils.makeFuzzySearchTerm( queryDTO.getDepartmentName( ) ) );
+        //token这个实体类是在干什么？TokenContextHolder这个类中是从前端获得用户输入的查询条件信息吗？
+        Token token = TokenContextHolder.getToken( );
 
-        Integer size = departmentMapper.count(queryDTO, token.getTenantCode());
-        PageUtils pageUtils = new PageUtils(queryDTO.getPage(), queryDTO.getPageSize(), size);
-        Page<DepartmentVO> pageData = new Page<>(pageUtils.getPage(), pageUtils.getPageSize(), pageUtils.getTotal(), new ArrayList<>());
-        if (size == 0) {
+        //获取命中个数
+        Integer size = departmentMapper.count( queryDTO , token.getTenantCode( ) );
+        //pageUtils是一个分页工具类
+        PageUtils pageUtils = new PageUtils( queryDTO.getPage( ) , queryDTO.getPageSize( ) , size );
+        Page<DepartmentVO> pageData = new Page<>( pageUtils.getPage( ) , pageUtils.getPageSize( ) , pageUtils.getTotal( ) , new ArrayList<>( ) );
+        if ( size == 0 ) {
             // 没有命中，则返回空数据。
             return pageData;
         }
 
-        List<Department> list = departmentMapper.list(queryDTO, pageUtils.getOffset(), pageUtils.getLimit(), token.getTenantCode());
-        for (Department department : list) {
-            pageData.getList().add(DepartmentUtils.convertToVO(department));
+        //入口参数为查询条件、开始位置、记录数量、租户代码
+        List<Department> list = departmentMapper.list( queryDTO , pageUtils.getOffset( ) , pageUtils.getLimit( ) , token.getTenantCode( ) );
+        for ( Department department : list ) {
+            //convertToVO将实体对象转换为VO对象，并且将符合查询条件的每一个部门信息加到分页列表中
+            pageData.getList( ).add( DepartmentUtils.convertToVO( department ) );
         }
 
         return pageData;
@@ -73,20 +97,21 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return 部门编码
      */
     @Override
-    public String addDepartment(DepartmentDTO departmentDTO) {
+    public String addDepartment( DepartmentDTO departmentDTO ) {
         // 校验输入数据正确性
-        DepartmentUtils.validateDepartment(departmentDTO);
+        DepartmentUtils.validateDepartment( departmentDTO );
         // 创建实体对象，用以保存到数据库
-        Department department = new Department();
+        Department department = new Department( );
         // 将输入的字段全部复制到实体对象中
-        BeanUtils.copyProperties(departmentDTO, department);
+        BeanUtils.copyProperties( departmentDTO , department );
         // 生成业务代码
-        department.setDepartmentCode(keyMaxValueService.generateBusinessCode(PrefixConstant.DEPARTMENT));
+        department.setDepartmentCode( keyMaxValueService.generateBusinessCode( PrefixConstant.DEPARTMENT ) );
         // 将token相关信息填入department对象
-        TokenContextHolder.formatInsert(department);
+        TokenContextHolder.formatInsert( department );
+
         // 调用DAO方法保存到数据库表
-        departmentMapper.insert(department);
-        return department.getDepartmentCode();
+        departmentMapper.insert( department );
+        return department.getDepartmentCode( );
     }
 
     /**
@@ -96,18 +121,18 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return 部门编码
      */
     @Override
-    public String updateDepartment(DepartmentDTO departmentDTO) {
+    public String updateDepartment( DepartmentDTO departmentDTO ) {
         // 校验输入数据正确性
-        Token token = TokenContextHolder.getToken();
-        DepartmentUtils.validateDepartment(departmentDTO);
-        Assert.hasText(departmentDTO.getDepartmentCode(), "部门代码不能为空");
-        Department department = departmentMapper.getByCode(departmentDTO.getDepartmentCode(), token.getTenantCode());
-        Assert.notNull(department, "为找到部门，代码为：" + departmentDTO.getDepartmentCode());
+        Token token = TokenContextHolder.getToken( );
+        DepartmentUtils.validateDepartment( departmentDTO );
+        Assert.hasText( departmentDTO.getDepartmentCode( ) , "部门代码不能为空" );
+        Department department = departmentMapper.getByCode( departmentDTO.getDepartmentCode( ) , token.getTenantCode( ) );
+        Assert.notNull( department , "为找到部门，代码为：" + departmentDTO.getDepartmentCode( ) );
 
-        BeanUtils.copyProperties(departmentDTO, department);
-        department.setUpdatedBy(token.getTenantCode());
-        departmentMapper.updateByPrimaryKey(department);
-        return department.getDepartmentCode();
+        BeanUtils.copyProperties( departmentDTO , department );
+        department.setUpdatedBy( token.getTenantCode( ) );
+        departmentMapper.updateByPrimaryKey( department );
+        return department.getDepartmentCode( );
     }
 
     /**
@@ -116,10 +141,10 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param codeList 编码列表
      */
     @Override
-    public void deleteByCodes(List<String> codeList) {
-        Assert.notEmpty(codeList, "部门编码列表不能为空");
-        Token token = TokenContextHolder.getToken();
-        departmentMapper.deleteByCodes(codeList, token.getTeacherCode(), token.getTenantCode());
+    public void deleteByCodes( List<String> codeList ) {
+        Assert.notEmpty( codeList , "部门编码列表不能为空" );
+        Token token = TokenContextHolder.getToken( );
+        departmentMapper.deleteByCodes( codeList , token.getTeacherCode( ) , token.getTenantCode( ) );
     }
 
     /**
@@ -129,16 +154,16 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return 包含部门信息的映射，key是部门编码
      */
     @Override
-    public Map<String, DepartmentVO> getDepartmentMap(List<String> codeList) {
-        if (CollectionUtils.isEmpty(codeList)) {
-            return new HashMap<>(1 << 2);
+    public Map<String, DepartmentVO> getDepartmentMap( List<String> codeList ) {
+        if ( CollectionUtils.isEmpty( codeList ) ) {
+            return new HashMap<>( 1 << 2 );
         }
 
-        Token token = TokenContextHolder.getToken();
-        List<Department> departmentList = departmentMapper.listByCodes(codeList, token.getTenantCode());
-        return departmentList.stream()
-                .map(item -> DepartmentUtils.convertToVO(item))
-                .collect(Collectors.toMap(DepartmentVO::getDepartmentCode, Function.identity()));
+        Token token = TokenContextHolder.getToken( );
+        List<Department> departmentList = departmentMapper.listByCodes( codeList , token.getTenantCode( ) );
+        return departmentList.stream( )
+                .map( item -> DepartmentUtils.convertToVO( item ) )
+                .collect( Collectors.toMap( DepartmentVO::getDepartmentCode , Function.identity( ) ) );
     }
 
     /**
@@ -148,12 +173,12 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return 部门列表
      */
     @Override
-    public List<DepartmentVO> listByName(String departmentName) {
-        Token token = TokenContextHolder.getToken();
-        departmentName = FormatUtils.makeFuzzySearchTerm(departmentName);
-        List<Department> departmentList = departmentMapper.listByName(departmentName, token.getTenantCode());
-        return departmentList.stream()
-                .map(item -> DepartmentUtils.convertToVO(item))
-                .collect(Collectors.toList());
+    public List<DepartmentVO> listByName( String departmentName ) {
+        Token token = TokenContextHolder.getToken( );
+        departmentName = FormatUtils.makeFuzzySearchTerm( departmentName );
+        List<Department> departmentList = departmentMapper.listByName( departmentName , token.getTenantCode( ) );
+        return departmentList.stream( )
+                .map( item -> DepartmentUtils.convertToVO( item ) )
+                .collect( Collectors.toList( ) );
     }
 }

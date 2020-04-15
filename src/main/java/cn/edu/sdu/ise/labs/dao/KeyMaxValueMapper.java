@@ -1,6 +1,7 @@
 package cn.edu.sdu.ise.labs.dao;
 
 import cn.edu.sdu.ise.labs.model.KeyMaxValue;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * @Author: lishikuan
  * @Date: Created on 2019/5/11
  */
+@Mapper
 public interface KeyMaxValueMapper {
     /**
      * 根据前缀查询当前值
@@ -18,9 +20,9 @@ public interface KeyMaxValueMapper {
      * @return 当前值
      */
     KeyMaxValue getKeyValue(
-            @Param("keyPrefix") String keyPrefix,
-            @Param("datePart") String datePart,
-            @Param("tenantCode") String tenantCode);
+            @Param("keyPrefix") String keyPrefix ,
+            @Param("datePart") String datePart ,
+            @Param("tenantCode") String tenantCode );
 
     /**
      * 根据当前值回写业务主键最大值表
@@ -30,8 +32,8 @@ public interface KeyMaxValueMapper {
      * @param currentValue 当前值
      * @param tenantCode   租户代码
      */
-    void insertAndUpdate(@Param("keyPrefix") String keyPrefix,
-                         @Param("datePart") String datePart,
-                         @Param("currentValue") Integer currentValue,
-                         @Param("tenantCode") String tenantCode);
+    void insertAndUpdate( @Param("keyPrefix") String keyPrefix ,
+                          @Param("datePart") String datePart ,
+                          @Param("currentValue") Integer currentValue ,
+                          @Param("tenantCode") String tenantCode );
 }

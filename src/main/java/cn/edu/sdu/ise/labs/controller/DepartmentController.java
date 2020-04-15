@@ -24,28 +24,28 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @PostMapping("add")
-    public ResultContext add(@RequestBody DepartmentDTO departmentDTO) {
-        return ResultContext.returnSuccess(departmentService.addDepartment(departmentDTO));
+    public ResultContext add( @RequestBody DepartmentDTO departmentDTO ) {
+        return ResultContext.returnSuccess( departmentService.addDepartment( departmentDTO ) );
     }
 
     @PostMapping("update")
-    public ResultContext update(@RequestBody DepartmentDTO departmentDTO) {
-        return ResultContext.returnSuccess(departmentService.updateDepartment(departmentDTO));
+    public ResultContext update( @RequestBody DepartmentDTO departmentDTO ) {
+        return ResultContext.returnSuccess( departmentService.updateDepartment( departmentDTO ) );
     }
 
     @PostMapping("list")
-    public ResultContext list(@RequestBody DepartmentQueryDTO queryDTO) {
-        return ResultContext.returnSuccess(departmentService.listByPage(queryDTO));
+    public ResultContext list( @RequestBody DepartmentQueryDTO queryDTO ) {
+        return ResultContext.returnSuccess( departmentService.listByPage( queryDTO ) );
     }
 
     @GetMapping("listByName")
-    public ResultContext listByName(String departmentName) {
-        return ResultContext.returnSuccess(departmentService.listByName(departmentName));
+    public ResultContext listByName( String departmentName ) {
+        return ResultContext.returnSuccess( departmentService.listByName( departmentName ) );
     }
 
     @PostMapping("delete")
-    public ResultContext delete(@RequestBody List<String> codeList) {
-        departmentService.deleteByCodes(codeList);
-        return ResultContext.returnSuccess(true);
+    public ResultContext delete( @RequestBody List<String> codeList ) {
+        departmentService.deleteByCodes( codeList );
+        return ResultContext.returnSuccess( true );
     }
 }

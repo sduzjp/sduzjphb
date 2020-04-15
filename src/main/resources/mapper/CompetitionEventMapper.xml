@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.sdu.ise.labs.dao.CompetitionEventMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.sdu.ise.labs.model.CompetitionEvent">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="competition_event_code" property="competitionEventCode" jdbcType="VARCHAR"/>
+        <result column="competition_event_name" property="competitionEventName" jdbcType="VARCHAR"/>
+        <result column="suite_type" property="suiteType" jdbcType="INTEGER"/>
+        <result column="plan_start_at" property="planStartAt" jdbcType="DATE"/>
+        <result column="plan_end_at" property="planEndAt" jdbcType="DATE"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, competition_event_code, competition_event_name, suite_type, plan_start_at, plan_end_at,
+    status, created_at, updated_at, created_by, updated_by
+    </sql>
+
+    <!-- 查询记录 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from competition_event
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 删除记录 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from competition_event
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent">
+        insert into competition_event (id, competition_event_code, competition_event_name,
+                                       suite_type, plan_start_at, plan_end_at,
+                                       status, created_by, updated_by)
+        values (#{id,jdbcType=INTEGER}, #{competitionEventCode,jdbcType=VARCHAR},
+                #{competitionEventName,jdbcType=VARCHAR},
+                #{suiteType,jdbcType=INTEGER}, #{planStartAt,jdbcType=DATE}, #{planEndAt,jdbcType=DATE},
+                #{status,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 更新记录 -->
+    <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent">
+        update competition_event
+        set competition_event_code = #{competitionEventCode,jdbcType=VARCHAR},
+            competition_event_name = #{competitionEventName,jdbcType=VARCHAR},
+            suite_type             = #{suiteType,jdbcType=INTEGER},
+            plan_start_at          = #{planStartAt,jdbcType=DATE},
+            plan_end_at            = #{planEndAt,jdbcType=DATE},
+            status                 = #{status,jdbcType=VARCHAR},
+            created_by             = #{createdBy,jdbcType=VARCHAR},
+            updated_by             = #{updatedBy,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据比赛项目编码获取比赛项目详情 -->
+    <select id="getByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from competition_event
+        <where>
+            <if test="competitionEventCode != null">
+                competition_event_code like #{competitionEventCode}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据查询条件获取命中个数 -->
+    <select id="eventList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from competition_event
+        <where>
+            <if test="eventListDTO.competitionEventName !=null">
+                competition_event_name like #{eventListDTO.competitionEventName}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据查询条件获取比赛项目列表 -->
+    <select id="count" resultType="integer">
+        select count(*)
+        from competition_event
+        <where>
+            <if test="competitionEventName != null">
+                competition_event_name like #{competitionEventName}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据查询条件获取比赛项目列表 -->
+    <select id="countCode" resultType="integer">
+        select count(*)
+        from competition_event
+        <where>
+            <if test="competitionEventCode != null">
+                competition_event_code like #{competitionEventCode}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据比赛项目编码数组批量删除比赛项目信息 -->
+    <delete id="deleteByCodes">
+        delete from
+        competition_event
+        where competition_event_code in
+        <foreach item="arr" index="index" collection="competitionEventCodeList" open="(" separator="," close=")">
+            #{arr}
+        </foreach>
+    </delete>
+
+    <!--    根据比赛项目名称获取下拉列表-->
+    <select id="listByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from competition_event
+        <where>
+            <if test="competitionEventName != null">
+                competition_event_name like #{competitionEventName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

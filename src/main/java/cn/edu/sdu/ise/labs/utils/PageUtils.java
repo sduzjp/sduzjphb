@@ -36,38 +36,39 @@ public class PageUtils {
      */
     private Integer limit;
 
-    public PageUtils(Integer page, Integer pageSize, Integer totalRecords) {
-        if (page != null) {
+    //覆盖重写构造方法，入口参数为页码、每页记录数、总记录数
+    public PageUtils( Integer page , Integer pageSize , Integer totalRecords ) {
+        if ( page != null ) {
             this.page = page;
         }
-        if (pageSize != null) {
+        if ( pageSize != null ) {
             this.pageSize = pageSize;
         }
-        Assert.notNull(totalRecords, "totalRecords不能为空");
-        Assert.isTrue(this.pageSize != 0, "pageSize不能为0");
+        Assert.notNull( totalRecords , "totalRecords不能为空" );
+        Assert.isTrue( this.pageSize != 0 , "pageSize不能为0" );
 
         this.total = totalRecords;
-        this.totalPages = (totalRecords + this.pageSize - 1) / this.pageSize;
+        this.totalPages = ( totalRecords + this.pageSize - 1 ) / this.pageSize;
 
-        Assert.isTrue(this.page == 1 ||
-                this.page <= this.totalPages && this.page > 0, "页码超出范围");
+        Assert.isTrue( this.page == 1 ||
+                this.page <= this.totalPages && this.page > 0 , "页码超出范围" );
 
-        offset = (this.page - 1) * this.pageSize;
+        offset = ( this.page - 1 ) * this.pageSize;
         limit = this.pageSize;
     }
 
-    public static Integer getPage(Integer page) {
-        if (null == page
-                || page == 0) {
+    public static Integer getPage( Integer page ) {
+        if ( null == page
+                || page == 0 ) {
             return DEFAULT_PAGE;
         }
 
         return page;
     }
 
-    public static Integer getPageSize(Integer pageSize) {
-        if (null == pageSize
-                || pageSize == 0) {
+    public static Integer getPageSize( Integer pageSize ) {
+        if ( null == pageSize
+                || pageSize == 0 ) {
             return DEFAULT_PAGE_SIZE;
         }
 

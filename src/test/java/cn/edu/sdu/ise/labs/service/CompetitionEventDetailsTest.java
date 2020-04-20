@@ -65,7 +65,9 @@ public class CompetitionEventDetailsTest {
         newCompetitionEventDTO.setCompetitionEventName( "短跑" );
         newCompetitionEventDTO.setPlanStartAt( "2020-03-30" );
         newCompetitionEventDTO.setPlanEndAt( "2020-04-30" );
-        newCompetitionEventDTO.setSuiteType( 4 );
+        newCompetitionEventDTO.setCreatedBy( "张三" );
+        newCompetitionEventDTO.setUpdatedBy( "张三" );
+        newCompetitionEventDTO.setSuiteType( 3 );
         newCompetitionEventDTO.setStatus( 1 );
         assert competitionEventService.addCompetitionEvent( newCompetitionEventDTO ) != null;
     }

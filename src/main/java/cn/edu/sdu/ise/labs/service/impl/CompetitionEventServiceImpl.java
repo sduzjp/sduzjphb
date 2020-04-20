@@ -68,7 +68,7 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         //若命中则将比赛项目实体类对象转换为VO对象
         competitionEventVO = CompetitionEventUtils.convertToVO( competitionEventMapper.getByCode( eventCode ) );
 
-        //加上组别名称和状态描述，进一步修改方法：如何关联数据字典进行查询获得
+        //加上组别名称和状态描述
         TypeDescUtils.SuiteTypeDesc( competitionEventVO );
         TypeDescUtils.StatusTypeDesc( competitionEventVO );
 

@@ -91,6 +91,8 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         String name = competitionEventListDTO.getCompetitionEventName( );
         //取得比赛项目名称，进行模糊查询
         competitionEventListDTO.setCompetitionEventName( FormatUtils.makeFuzzySearchTerm( competitionEventListDTO.getCompetitionEventName( ) ) );
+        //用户登录后保存用户信息
+        Token token = TokenContextHolder.getToken( );
 
         // 根据比赛项目名称获取命中个数
         Integer size = competitionEventMapper.count( competitionEventListDTO.getCompetitionEventName( ) );
@@ -106,7 +108,7 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         //入口参数为查询条件，比赛项目名称，页码，每页记录条数
         CompetitionEventVO competitionEventVO = new CompetitionEventVO( );
         competitionEventListDTO.setCompetitionEventName( name );
-        List<CompetitionEvent> list = competitionEventMapper.eventList( competitionEventListDTO );
+        List<CompetitionEvent> list = competitionEventMapper.eventList( competitionEventListDTO , pageUtils.getOffset( ) , pageUtils.getLimit( ) );
         for ( CompetitionEvent competitionEvent : list ) {
             //convertToVO将实体对象转换为VO对象，并且将符合查询条件的每一个部门信息加到分页列表中
             competitionEventVO = CompetitionEventUtils.convertToVO( competitionEvent );
@@ -228,6 +230,12 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         return size;
     }
 
+    /**
+     * 根据比赛项目名称获取比赛项目下拉列表
+     *
+     * @param competitionEventName
+     * @return
+     */
     @Override
     public List<CompetitionEventVO> listByName( String competitionEventName ) {
         Token token = TokenContextHolder.getToken( );

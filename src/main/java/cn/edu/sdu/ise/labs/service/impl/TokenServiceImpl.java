@@ -23,7 +23,7 @@ public class TokenServiceImpl implements TokenService {
     @Value("${timeout}")
     private int timeout;
 
-    private Map<String, Token> tokenMap = new ConcurrentHashMap<>(1 << 8);
+    private Map<String, Token> tokenMap = new ConcurrentHashMap<>( 1 << 8 );
 
     /**
      * 用户登录，返回令牌信息
@@ -33,14 +33,15 @@ public class TokenServiceImpl implements TokenService {
      * @return 令牌信息
      */
     @Override
-    public Token login(String workCode, String password) {
-        Token token = new Token();
-        token.setAccessToken(makeToken());
-        token.setTeacherName("test");
-        token.setTenantCode("001");
-        token.setTeacherCode("TE000001");
-        token.setLastAction(new Date());
-        tokenMap.put(token.getAccessToken(), token);
+    public Token login( String workCode , String password ) {
+        Token token = new Token( );
+        token.setAccessToken( makeToken( ) );
+        token.setTeacherName( "test" );
+        token.setTenantCode( "001" );
+        token.setCompetitionEventCode( "001" );
+        token.setTeacherCode( "TE000001" );
+        token.setLastAction( new Date( ) );
+        tokenMap.put( token.getAccessToken( ) , token );
         return token;
     }
 
@@ -51,8 +52,8 @@ public class TokenServiceImpl implements TokenService {
      * @return 令牌信息
      */
     @Override
-    public Token getToken(String accessToken) {
-        return tokenMap.get(accessToken);
+    public Token getToken( String accessToken ) {
+        return tokenMap.get( accessToken );
     }
 
     /**
@@ -61,22 +62,22 @@ public class TokenServiceImpl implements TokenService {
      * @param accessToken 令牌token
      */
     @Override
-    public void logout(String accessToken) {
+    public void logout( String accessToken ) {
 
     }
 
-    private String makeToken() { // checkException
-        return UUID.randomUUID().toString().replaceAll("-", "") + "";
+    private String makeToken( ) { // checkException
+        return UUID.randomUUID( ).toString( ).replaceAll( "-" , "" ) + "";
     }
 
     @Scheduled(cron = "*/20 * *  * * * ")
-    public void scheduled() {
-        Iterator<Map.Entry<String, Token>> iterator = tokenMap.entrySet().iterator();
-        Date now = new Date();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Token> entry = iterator.next();
-            if (now.getTime() - entry.getValue().getLastAction().getTime() > 60 * timeout * 1000) {
-                iterator.remove();
+    public void scheduled( ) {
+        Iterator<Map.Entry<String, Token>> iterator = tokenMap.entrySet( ).iterator( );
+        Date now = new Date( );
+        while ( iterator.hasNext( ) ) {
+            Map.Entry<String, Token> entry = iterator.next( );
+            if ( now.getTime( ) - entry.getValue( ).getLastAction( ).getTime( ) > 60 * timeout * 1000 ) {
+                iterator.remove( );
             }
         }
     }

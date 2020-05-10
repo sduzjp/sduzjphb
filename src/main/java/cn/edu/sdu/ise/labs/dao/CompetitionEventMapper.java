@@ -62,7 +62,7 @@ public interface CompetitionEventMapper {
     /**
      * 根据查询条件获取命中个数，入口参数为比赛项目名称
      *
-     * @param competitionEventName 查询条件:比赛项目编码
+     * @param competitionEventName 查询条件:比赛项目名称
      * @return 命中数量
      */
     Integer count(
@@ -83,10 +83,14 @@ public interface CompetitionEventMapper {
      * 根据查询条件获取比赛项目列表
      *
      * @param eventListDTO 查询条件
+     * @param offset       开始位置
+     * @param limit        记录数量
      * @return 比赛项目列表
      */
     List<CompetitionEvent> eventList(
-            @Param("eventListDTO") CompetitionEventListDTO eventListDTO );
+            @Param("eventListDTO") CompetitionEventListDTO eventListDTO ,
+            @Param("offset") Integer offset ,
+            @Param("limit") Integer limit );
 
     /**
      * 根据比赛项目编码列表批量删除比赛项目信息
@@ -105,6 +109,7 @@ public interface CompetitionEventMapper {
      */
     List<CompetitionEvent> listByName(
             @Param("competitionEventName") String competitionEventName
+
     );
 
 }

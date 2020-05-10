@@ -81,6 +81,7 @@
                 competition_event_name like #{eventListDTO.competitionEventName}
             </if>
         </where>
+        limit #{offset}, #{limit}
     </select>
 
     <!-- 根据查询条件获取比赛项目列表 -->

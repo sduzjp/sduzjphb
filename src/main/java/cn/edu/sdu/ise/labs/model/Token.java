@@ -21,7 +21,10 @@ public class Token {
      * 租户代码
      */
     private String tenantCode;
-
+    /**
+     * 比赛项目编码
+     */
+    private String competitionEventCode;
     /**
      * 教师名称
      */

@@ -36,7 +36,7 @@ public class CompetitionEventDetailsTest {
     @Test
     public void testGetDetails( ) {
         initCompetitionEventToken( );
-        String eventCode = "001";
+        String eventCode = "0001";
         CompetitionEventVO competitionEventVO = new CompetitionEventVO( );
         competitionEventVO = competitionEventService.getDetails( eventCode );
         assert competitionEventService.getDetails( eventCode ) != null;
@@ -79,12 +79,14 @@ public class CompetitionEventDetailsTest {
     public void testUpdateCompetitionEvent( ) {
         initCompetitionEventToken( );
         ModifyCompetitionEventDTO modifyCompetitionEventDTO = new ModifyCompetitionEventDTO( );
-        modifyCompetitionEventDTO.setCompetitionEventCode( "002" );
+        modifyCompetitionEventDTO.setCompetitionEventCode( "0002" );
         modifyCompetitionEventDTO.setCompetitionEventName( "长跑" );
         modifyCompetitionEventDTO.setPlanStartAt( "2020-04-01" );
         modifyCompetitionEventDTO.setPlanEndAt( "2020-04-10" );
         modifyCompetitionEventDTO.setSuiteType( 1 );
         modifyCompetitionEventDTO.setStatus( 2 );
+        modifyCompetitionEventDTO.setCreatedBy( "张三" );
+        modifyCompetitionEventDTO.setUpdatedBy( "李四" );
         assert competitionEventService.updateCompetitionEvent( modifyCompetitionEventDTO ) != null;
     }
 

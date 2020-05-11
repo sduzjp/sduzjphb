@@ -59,7 +59,7 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         competitionEventVO.setCompetitionEventCode( FormatUtils.makeFuzzySearchTerm( eventCode ) );
 
         //获取命中个数
-        Integer size = competitionEventMapper.count( competitionEventVO.getCompetitionEventCode( ) );
+        Integer size = competitionEventMapper.count( competitionEventVO.getCompetitionEventCode( ) , token.getTenantCode( ) );
         if ( size == 0 ) {
             // 没有命中，则返回空数据。
             return competitionEventVO;
@@ -91,11 +91,11 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         String name = competitionEventListDTO.getCompetitionEventName( );
         //取得比赛项目名称，进行模糊查询
         competitionEventListDTO.setCompetitionEventName( FormatUtils.makeFuzzySearchTerm( competitionEventListDTO.getCompetitionEventName( ) ) );
-        //用户登录后保存用户信息
+//        //用户登录后保存用户信息
         Token token = TokenContextHolder.getToken( );
 
         // 根据比赛项目名称获取命中个数
-        Integer size = competitionEventMapper.count( competitionEventListDTO.getCompetitionEventName( ) );
+        Integer size = competitionEventMapper.count( competitionEventListDTO.getCompetitionEventName( ) , token.getTenantCode( ) );
 
         //pageUtils是一个分页工具类，入口参数为页码、页记录数、总记录数
         PageUtils pageUtils = new PageUtils( competitionEventListDTO.getPage( ) , competitionEventListDTO.getPageSize( ) , size );
@@ -107,8 +107,8 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
 
         //入口参数为查询条件，比赛项目名称，页码，每页记录条数
         CompetitionEventVO competitionEventVO = new CompetitionEventVO( );
-        competitionEventListDTO.setCompetitionEventName( name );
-        List<CompetitionEvent> list = competitionEventMapper.eventList( competitionEventListDTO , pageUtils.getOffset( ) , pageUtils.getLimit( ) );
+        //competitionEventListDTO.setCompetitionEventName( name );
+        List<CompetitionEvent> list = competitionEventMapper.eventList( competitionEventListDTO , token.getTenantCode( ) , pageUtils.getOffset( ) , pageUtils.getLimit( ) );
         for ( CompetitionEvent competitionEvent : list ) {
             //convertToVO将实体对象转换为VO对象，并且将符合查询条件的每一个部门信息加到分页列表中
             competitionEventVO = CompetitionEventUtils.convertToVO( competitionEvent );
@@ -188,10 +188,14 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         competitionEvent.setPlanEndAt( FormatUtils.parseDate( modifyCompetitionEventDTO.getPlanEndAt( ) ) );
         BeanUtils.copyProperties( modifyCompetitionEventDTO , competitionEvent );
 
+        Token token = TokenContextHolder.getToken( );
+
         // 将token相关信息填入competitionEvent对象
         TokenContextHolder.formatInsert( competitionEvent );
 
         //将创建人和更新人信息送入competitionEvent
+//        competitionEvent.setCreatedBy( token.getCreatedBy( ) );
+//        competitionEvent.setUpdatedBy( token.getUpdatedBy( ) );
         competitionEvent.setCreatedBy( modifyCompetitionEventDTO.getCreatedBy( ) );
         competitionEvent.setUpdatedBy( modifyCompetitionEventDTO.getUpdatedBy( ) );
 
@@ -220,7 +224,7 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         //获取比赛项目编码命中个数即将要删除的记录条数
         Integer size = 0;
         for ( int i = 0 ; i < competitionEventCodeList.size( ) ; i++ ) {
-            size += competitionEventMapper.count( competitionEventCodeList.get( i ) );
+            size += competitionEventMapper.count( competitionEventCodeList.get( i ) , token.getTenantCode( ) );
         }
 
         //根据比赛项目编码列表批量删除比赛项目信息

@@ -21,6 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `competition_event`;
 CREATE TABLE `competition_event` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tenant_code` varchar(20) NOT NULL COMMENT '租户代码',
   `competition_event_code` varchar(20) NOT NULL COMMENT '比赛项目编码',
   `competition_event_name` varchar(50) DEFAULT NULL COMMENT '比赛项目名称',
   `suite_type` int(11) DEFAULT NULL COMMENT '组别',

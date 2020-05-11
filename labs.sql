@@ -117,6 +117,7 @@ DROP TABLE IF EXISTS `competition_event`;
 CREATE TABLE `competition_event`
 (
     `id`                     int(11)     NOT NULL AUTO_INCREMENT,
+    `tenant_code`            varchar(20) NOT NULL COMMENT '租户代码',
     `competition_event_code` varchar(20) NOT NULL COMMENT '比赛项目编码',
     `competition_event_name` varchar(50) DEFAULT NULL COMMENT '比赛项目名称',
     `suite_type`             int(11)     DEFAULT NULL COMMENT '组别',
@@ -136,10 +137,10 @@ CREATE TABLE `competition_event`
 -- Records of competition_event
 -- ----------------------------
 INSERT INTO `competition_event`
-VALUES ('1', '001', '长跑', '1', '2020-03-30 23:13:28',
+VALUES ('1', '001', '0001', '长跑', '1', '2020-03-30 23:13:28',
         '2020-04-30 18:14:23', '1', '2020-03-29 08:30:20', '2020-03-29 18:30:25', '张三', '李四');
 INSERT INTO `competition_event`
-VALUES ('2', '002', '长跑', '1', '2020-03-31 23:13:28',
+VALUES ('2', '001', '0002', '长跑', '1', '2020-03-31 23:13:28',
         '2020-04-20 18:14:23', '1', '2020-03-29 08:30:20', '2020-03-29 19:20:29', '张三', '李四');
 
 -- --------------------------------------

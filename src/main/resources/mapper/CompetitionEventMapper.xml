@@ -3,6 +3,7 @@
 <mapper namespace="cn.edu.sdu.ise.labs.dao.CompetitionEventMapper">
     <resultMap id="BaseResultMap" type="cn.edu.sdu.ise.labs.model.CompetitionEvent">
         <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="tenant_code" property="tenantCode" jdbcType="VARCHAR"/>
         <result column="competition_event_code" property="competitionEventCode" jdbcType="VARCHAR"/>
         <result column="competition_event_name" property="competitionEventName" jdbcType="VARCHAR"/>
         <result column="suite_type" property="suiteType" jdbcType="INTEGER"/>
@@ -15,7 +16,7 @@
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, competition_event_code, competition_event_name, suite_type, plan_start_at, plan_end_at,
+        id, tenant_code,competition_event_code, competition_event_name, suite_type, plan_start_at, plan_end_at,
     status, created_at, updated_at, created_by, updated_by
     </sql>
 
@@ -36,10 +37,10 @@
 
     <!-- 新增记录 -->
     <insert id="insert" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent">
-        insert into competition_event (id, competition_event_code, competition_event_name,
+        insert into competition_event (id, tenant_code, competition_event_code, competition_event_name,
                                        suite_type, plan_start_at, plan_end_at,
                                        status, created_by, updated_by)
-        values (#{id,jdbcType=INTEGER}, #{competitionEventCode,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, #{competitionEventCode,jdbcType=VARCHAR},
                 #{competitionEventName,jdbcType=VARCHAR},
                 #{suiteType,jdbcType=INTEGER}, #{planStartAt,jdbcType=DATE}, #{planEndAt,jdbcType=DATE},
                 #{status,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR})
@@ -80,6 +81,7 @@
             <if test="eventListDTO.competitionEventName !=null">
                 competition_event_name like #{eventListDTO.competitionEventName}
             </if>
+            and tenant_code = #{tenantCode}
         </where>
         limit #{offset}, #{limit}
     </select>
@@ -92,6 +94,7 @@
             <if test="competitionEventName != null">
                 competition_event_name like #{competitionEventName}
             </if>
+            and tenant_code = #{tenantCode}
         </where>
     </select>
 

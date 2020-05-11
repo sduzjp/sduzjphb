@@ -63,10 +63,12 @@ public interface CompetitionEventMapper {
      * 根据查询条件获取命中个数，入口参数为比赛项目名称
      *
      * @param competitionEventName 查询条件:比赛项目名称
+     * @param tenantCode           租户代码
      * @return 命中数量
      */
     Integer count(
-            @Param("competitionEventName") String competitionEventName
+            @Param("competitionEventName") String competitionEventName ,
+            @Param("tenantCode") String tenantCode
     );
 
     /**
@@ -85,10 +87,12 @@ public interface CompetitionEventMapper {
      * @param eventListDTO 查询条件
      * @param offset       开始位置
      * @param limit        记录数量
+     * @param tenantCode   租户代码
      * @return 比赛项目列表
      */
     List<CompetitionEvent> eventList(
             @Param("eventListDTO") CompetitionEventListDTO eventListDTO ,
+            @Param("tenantCode") String tenantCode ,
             @Param("offset") Integer offset ,
             @Param("limit") Integer limit );
 

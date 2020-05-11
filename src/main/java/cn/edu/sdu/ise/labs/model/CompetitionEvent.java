@@ -16,6 +16,10 @@ public class CompetitionEvent {
      */
     private Integer id;
     /**
+     * 租户代码
+     */
+    private String tenantCode;
+    /**
      * 比赛项目编码
      */
     private String competitionEventCode;

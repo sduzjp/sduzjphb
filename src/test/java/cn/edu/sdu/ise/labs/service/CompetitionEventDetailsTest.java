@@ -91,7 +91,7 @@ public class CompetitionEventDetailsTest {
     }
 
     /**
-     * 测试根据比赛项目编码批量删除比赛项目列表接口
+     * 测试根据比赛项目名称批量删除比赛项目列表接口
      */
     @Test
     public void testDeleteCompeitionEvent( ) {

@@ -194,8 +194,6 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
         TokenContextHolder.formatInsert( competitionEvent );
 
         //将创建人和更新人信息送入competitionEvent
-//        competitionEvent.setCreatedBy( token.getCreatedBy( ) );
-//        competitionEvent.setUpdatedBy( token.getUpdatedBy( ) );
         competitionEvent.setCreatedBy( modifyCompetitionEventDTO.getCreatedBy( ) );
         competitionEvent.setUpdatedBy( modifyCompetitionEventDTO.getUpdatedBy( ) );
 
@@ -210,25 +208,25 @@ public class CompetitionEventServiceImpl implements CompetitionEventService {
     /**
      * 删除比赛项目
      *
-     * @param competitionEventCodeList 入口参数为比赛项目编码的列表
+     * @param competitionEventNameList 入口参数为比赛项目编码的列表
      * @return 删除记录的条数
      */
     @Override
-    public Integer deleteCompetitionEvent( List<String> competitionEventCodeList ) {
+    public Integer deleteCompetitionEvent( List<String> competitionEventNameList ) {
         //用户登录后保存用户个人信息
         Token token = TokenContextHolder.getToken( );
 
         //校验比赛项目列表的输入正确性
-        Assert.notEmpty( competitionEventCodeList , "比赛项目编码列表不能为空" );
+        Assert.notEmpty( competitionEventNameList , "比赛项目名称列表不能为空" );
 
         //获取比赛项目编码命中个数即将要删除的记录条数
         Integer size = 0;
-        for ( int i = 0 ; i < competitionEventCodeList.size( ) ; i++ ) {
-            size += competitionEventMapper.count( competitionEventCodeList.get( i ) , token.getTenantCode( ) );
+        for ( int i = 0 ; i < competitionEventNameList.size( ) ; i++ ) {
+            size += competitionEventMapper.count( competitionEventNameList.get( i ) , token.getTenantCode( ) );
         }
 
         //根据比赛项目编码列表批量删除比赛项目信息
-        competitionEventMapper.deleteByCodes( competitionEventCodeList );
+        competitionEventMapper.deleteByCodes( competitionEventNameList );
 
         //返回删除的记录条数
         return size;
